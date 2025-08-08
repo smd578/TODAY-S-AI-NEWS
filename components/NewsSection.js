@@ -3,7 +3,7 @@ import React from 'react';
 import NewsCard from './NewsCard';
 import Link from 'next/link';
 
-const NewsSection = ({ title, articles, query }) => {
+const NewsSection = ({ title, articles, onMoreClick }) => {
   if (!articles) {
     return null;
   }
@@ -12,9 +12,7 @@ const NewsSection = ({ title, articles, query }) => {
     <section className="mb-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>{title}</h2>
-        <Link href={`/theme/${encodeURIComponent(query)}?title=${encodeURIComponent(title)}`} passHref>
-          <button className="btn btn-primary">더보기</button>
-        </Link>
+        <button className="btn btn-primary" onClick={onMoreClick}>더보기</button>
       </div>
       <div className="row">
         {articles.slice(0, 8).map((article, index) => (
