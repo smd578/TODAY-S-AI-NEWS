@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 export default function Home() {
   // 데이터와 상태를 모두 Context에서 가져옵니다.
-  const { news, loading, themes, sortBy, setSortBy } = useNews();
+  const { news, loading, themes, sortBy, setSortBy, region, setRegion } = useNews();
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
@@ -15,9 +15,14 @@ export default function Home() {
     setIsMounted(true);
   }, []);
 
-  // 정렬 변경 핸들러는 이제 Context의 setSortBy를 호출하기만 하면 됩니다.
+  // 정렬 변경 핸들러
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
+  };
+
+  // 지역 변경 핸들러
+  const handleRegionChange = (e) => {
+    setRegion(e.target.value);
   };
 
   const handleMoreClick = (title) => {
@@ -35,15 +40,28 @@ export default function Home() {
       <main className="py-5">
         <div className="hero-gradient text-center mb-5">
           <h1 className="mb-3">TODAY'S AI NEWS</h1>
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center flex-wrap">
+            {/* 정렬 옵션 */}
             <div className="form-check form-check-inline">
-              {/* 전역 sortBy 상태를 사용합니다. */}
               <input className="form-check-input" type="radio" name="sortBy" id="publishedAt" value="publishedAt" checked={sortBy === 'publishedAt'} onChange={handleSortChange} />
               <label className="form-check-label" htmlFor="publishedAt">최신순</label>
             </div>
             <div className="form-check form-check-inline">
               <input className="form-check-input" type="radio" name="sortBy" id="popularity" value="popularity" checked={sortBy === 'popularity'} onChange={handleSortChange} />
               <label className="form-check-label" htmlFor="popularity">인기순</label>
+            </div>
+
+            {/* 구분선 */}
+            <div className="mx-2" style={{ borderLeft: '1px solid #ccc', height: '24px' }}></div>
+
+            {/* 지역 옵션 */}
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" type="radio" name="region" id="all" value="all" checked={region === 'all'} onChange={handleRegionChange} />
+              <label className="form-check-label" htmlFor="all">전체</label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" type="radio" name="region" id="kr" value="kr" checked={region === 'kr'} onChange={handleRegionChange} />
+              <label className="form-check-label" htmlFor="kr">국내</label>
             </div>
           </div>
         </div>
