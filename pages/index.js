@@ -6,8 +6,8 @@ import { useNews } from '../context/NewsContext';
 import { useRouter } from 'next/router';
 
 export default function Home() {
-  // 데이터와 상태를 모두 Context에서 가져옵니다.
-  const { news, loading, themes, sortBy, setSortBy, region, setRegion } = useNews();
+  // error 상태를 context에서 가져옵니다.
+  const { news, loading, themes, sortBy, setSortBy, region, setRegion, error } = useNews();
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
@@ -66,9 +66,13 @@ export default function Home() {
           </div>
         </div>
 
-        {loading || !isMounted ? (
-          <p className="text-center">Loading news...</p>
-        ) : (
+        {loading && <p className="text-center">Loading news...</p>}
+
+        {/* 로딩이 끝난 후, 에러가 있으면 에러 메시지를 표시합니다. */}
+        {!loading && error && <p className="text-center text-danger">{error}</p>}
+
+        {/* 로딩이 끝났고 에러가 없을 때만 뉴스 목록을 표시합니다. */}
+        {!loading && !error && isMounted && (
           <>
             {themes && themes.map((title, index) => (
               <div key={title}>
@@ -77,7 +81,6 @@ export default function Home() {
                   articles={news[title] ? news[title].slice(0, 4) : []} 
                   onMoreClick={() => handleMoreClick(title)}
                 />
-                {/* 마지막 섹션 다음에는 구분선을 추가하지 않습니다. */}
                 {index < themes.length - 1 && <hr className="themed-hr" />}
               </div>
             ))}
